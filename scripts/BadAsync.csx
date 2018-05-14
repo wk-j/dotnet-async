@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Threading;
 
 var client = new HttpClient();
 
@@ -20,7 +21,9 @@ public String DownloadStringV5(String url) {
     }).Result;
 }
 
-var rs = DownloadStringV5("https://github.com/wk-j");
+void Deadlock() {
+    var rs = DownloadStringV5("https://github.com/wk-j");
+    Console.WriteLine(rs);
+}
 
-
-Console.WriteLine(rs);
+SynchronizationContext.Current.Send(_ => Deadlock(), "");
